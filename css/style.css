@@ -1,0 +1,143 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: inherit;
+}
+
+html {
+  font-size: 10px;
+  /* 62.5% broke the ticktacktoe media query scaling on real-worldSafari */
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  color: #333;
+  background-color: #d8dcff;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 1s;
+}
+
+.container {
+  margin: 3.2rem;
+  display: grid;
+  grid-template-columns: 40fr 60fr;
+  justify-items: center;
+  align-items: center;
+  gap: 10rem;
+  transition: all 1s;
+}
+
+.aside {
+  min-width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5rem;
+}
+
+.game-grid {
+  width: 60rem;
+  height: 60rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 0.3rem;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  transition: all 1s;
+}
+
+.heading-primary {
+  font-size: 6rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 0;
+  padding-bottom: 0;
+  position: relative;
+}
+
+.author {
+  position: absolute;
+  top: -3rem;
+  left: -2rem;
+  display: block;
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: 0.75;
+  text-transform: uppercase;
+  color: #d8dcff;
+  background-color: rgba(174, 173, 240, 0.75);
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  align-self: flex-start;
+}
+
+.status {
+  font-size: 3.2rem;
+  font-weight: 500;
+}
+
+.btn--new {
+  width: 18rem;
+  height: 4.5rem;
+  background-color: #000;
+  color: #d8dcff;
+  border: 0;
+  font-size: 2.4rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 1s;
+  border-radius: 1rem;
+}
+
+.margin-animation .btn--new {
+  margin-top: 10rem;
+}
+
+.btn--new:hover {
+  transform: translate(-0.2rem, -0.2rem);
+}
+
+.sq {
+  width: 20rem;
+  height: 20rem;
+  background-color: #aeadf0;
+  transition: all 0.3s;
+}
+
+.o {
+  width: 100%;
+  height: 100%;
+}
+
+.x {
+  width: 100%;
+  height: 100%;
+}
+
+.hidden {
+  display: none;
+}
+
+.margin-animation {
+  gap: 20rem;
+}
+
+/* Optimisations: */
+/* 1. Adding a class when winning instead of styles. */
+/* 2. Using min-height = 100vh instead of height on body. */
+/* 3. Adding the <main> element with a container class around the content and creating a 40/60 grid instead of flex container, then changing the other <main> to <figure> for the game area. Also, changing JS to add class to the container instead of the body. */
+/* 4. Deleting width for aside (grid controls it now). */
+/* 5. Making <body> flex again for vertical centering. */
+/* 6. HOLD Adding max-width 130rem on the container to set constrains (actual ~126rem). */
+/* 7. Changing gap in container to 10 (f. 15), gap in margin-animation is 20. */
+/* 8. Put transition on the container to enable animation of moving margins. */
+/* 9. Adding min-width 100% to aside to make it fill the whole section and fix a shift when the width of the text changes in the status. */
+/* 10. Adding transition: all 0.3s; to grid sections to align change of color. */
+/* 11. Changed 62.5% base font-size to 10px to fix the scaling on Mobile Safari. */
