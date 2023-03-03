@@ -18,9 +18,21 @@ const gameStatus = document.querySelector(".status");
 const btnNew = document.querySelector(".btn--new");
 const author = document.querySelector(".author");
 
+const combinations = [
+  [0, 1, 2],
+  [3, 4, 5],
+  [6, 7, 8],
+  [0, 3, 6],
+  [1, 4, 7],
+  [2, 5, 8],
+  [0, 4, 8],
+  [2, 4, 6],
+];
+
 let activePlayer;
 let activeSquare;
 let gameStateOn;
+
 gameStatus.textContent = "Are you ready? 😆";
 
 const init = function () {
@@ -101,221 +113,104 @@ const checkDraw = function () {
 };
 
 const checkWinner = function () {
-  if (
-    !document
-      .querySelector(`.sq0--${activePlayer}`)
-      .classList.contains("hidden") &&
-    !document
-      .querySelector(`.sq1--${activePlayer}`)
-      .classList.contains("hidden") &&
-    !document
-      .querySelector(`.sq2--${activePlayer}`)
-      .classList.contains("hidden")
-  ) {
-    winState();
-    sq0.style.backgroundColor = "#8CFBDE";
-    sq1.style.backgroundColor = "#8CFBDE";
-    sq2.style.backgroundColor = "#8CFBDE";
-  } else if (
-    !document
-      .querySelector(`.sq3--${activePlayer}`)
-      .classList.contains("hidden") &&
-    !document
-      .querySelector(`.sq4--${activePlayer}`)
-      .classList.contains("hidden") &&
-    !document
-      .querySelector(`.sq5--${activePlayer}`)
-      .classList.contains("hidden")
-  ) {
-    winState();
-    sq3.style.backgroundColor = "#8CFBDE";
-    sq4.style.backgroundColor = "#8CFBDE";
-    sq5.style.backgroundColor = "#8CFBDE";
-  } else if (
-    !document
-      .querySelector(`.sq6--${activePlayer}`)
-      .classList.contains("hidden") &&
-    !document
-      .querySelector(`.sq7--${activePlayer}`)
-      .classList.contains("hidden") &&
-    !document
-      .querySelector(`.sq8--${activePlayer}`)
-      .classList.contains("hidden")
-  ) {
-    winState();
-    sq6.style.backgroundColor = "#8CFBDE";
-    sq7.style.backgroundColor = "#8CFBDE";
-    sq8.style.backgroundColor = "#8CFBDE";
-  } else if (
-    !document
-      .querySelector(`.sq0--${activePlayer}`)
-      .classList.contains("hidden") &&
-    !document
-      .querySelector(`.sq3--${activePlayer}`)
-      .classList.contains("hidden") &&
-    !document
-      .querySelector(`.sq6--${activePlayer}`)
-      .classList.contains("hidden")
-  ) {
-    winState();
-    sq0.style.backgroundColor = "#8CFBDE";
-    sq3.style.backgroundColor = "#8CFBDE";
-    sq6.style.backgroundColor = "#8CFBDE";
-  } else if (
-    !document
-      .querySelector(`.sq1--${activePlayer}`)
-      .classList.contains("hidden") &&
-    !document
-      .querySelector(`.sq4--${activePlayer}`)
-      .classList.contains("hidden") &&
-    !document
-      .querySelector(`.sq7--${activePlayer}`)
-      .classList.contains("hidden")
-  ) {
-    winState();
-    sq1.style.backgroundColor = "#8CFBDE";
-    sq4.style.backgroundColor = "#8CFBDE";
-    sq7.style.backgroundColor = "#8CFBDE";
-  } else if (
-    !document
-      .querySelector(`.sq2--${activePlayer}`)
-      .classList.contains("hidden") &&
-    !document
-      .querySelector(`.sq5--${activePlayer}`)
-      .classList.contains("hidden") &&
-    !document
-      .querySelector(`.sq8--${activePlayer}`)
-      .classList.contains("hidden")
-  ) {
-    winState();
-    sq2.style.backgroundColor = "#8CFBDE";
-    sq5.style.backgroundColor = "#8CFBDE";
-    sq8.style.backgroundColor = "#8CFBDE";
-  } else if (
-    !document
-      .querySelector(`.sq0--${activePlayer}`)
-      .classList.contains("hidden") &&
-    !document
-      .querySelector(`.sq4--${activePlayer}`)
-      .classList.contains("hidden") &&
-    !document
-      .querySelector(`.sq8--${activePlayer}`)
-      .classList.contains("hidden")
-  ) {
-    winState();
-    sq0.style.backgroundColor = "#8CFBDE";
-    sq4.style.backgroundColor = "#8CFBDE";
-    sq8.style.backgroundColor = "#8CFBDE";
-  } else if (
-    !document
-      .querySelector(`.sq2--${activePlayer}`)
-      .classList.contains("hidden") &&
-    !document
-      .querySelector(`.sq4--${activePlayer}`)
-      .classList.contains("hidden") &&
-    !document
-      .querySelector(`.sq6--${activePlayer}`)
-      .classList.contains("hidden")
-  ) {
-    winState();
-    sq2.style.backgroundColor = "#8CFBDE";
-    sq4.style.backgroundColor = "#8CFBDE";
-    sq6.style.backgroundColor = "#8CFBDE";
-  } else if (checkDraw()) {
-    gameStatus.textContent = `A draw. 🤷`;
-    gameStateOn = false;
-  } else {
-    switchPlayer();
+  for (const combo of combinations) {
+    if (
+      !document
+        .querySelector(`.sq${combo[0]}--${activePlayer}`)
+        .classList.contains("hidden") &&
+      !document
+        .querySelector(`.sq${combo[1]}--${activePlayer}`)
+        .classList.contains("hidden") &&
+      !document
+        .querySelector(`.sq${combo[2]}--${activePlayer}`)
+        .classList.contains("hidden")
+    ) {
+      document.querySelector(`.sq--${combo[0]}`).style.backgroundColor =
+        "#8CFBDE";
+      document.querySelector(`.sq--${combo[1]}`).style.backgroundColor =
+        "#8CFBDE";
+      document.querySelector(`.sq--${combo[2]}`).style.backgroundColor =
+        "#8CFBDE";
+      winState();
+      return true;
+    }
+  }
+};
+
+const runResult = function () {
+  if (isIconHidden(activeSquare)) {
+    showIcon();
+    if (!checkWinner()) {
+      if (checkDraw()) {
+        gameStatus.textContent = `A draw. 🤷`;
+        gameStateOn = false;
+      } else {
+        switchPlayer();
+      }
+    }
   }
 };
 
 sq0.addEventListener("click", function () {
   if (gameStateOn) {
     activeSquare = "0";
-    if (isIconHidden(activeSquare)) {
-      showIcon();
-      checkWinner();
-    }
+    runResult();
   }
 });
 
 sq1.addEventListener("click", function () {
   if (gameStateOn) {
     activeSquare = "1";
-    if (isIconHidden(activeSquare)) {
-      showIcon();
-      checkWinner();
-    }
+    runResult();
   }
 });
 
 sq2.addEventListener("click", function () {
   if (gameStateOn) {
     activeSquare = "2";
-    if (isIconHidden(activeSquare)) {
-      showIcon();
-      checkWinner();
-    }
+    runResult();
   }
 });
 
 sq3.addEventListener("click", function () {
   if (gameStateOn) {
     activeSquare = "3";
-    if (isIconHidden(activeSquare)) {
-      showIcon();
-      checkWinner();
-    }
+    runResult();
   }
 });
 
 sq4.addEventListener("click", function () {
   if (gameStateOn) {
     activeSquare = "4";
-    if (isIconHidden(activeSquare)) {
-      showIcon();
-      checkWinner();
-    }
+    runResult();
   }
 });
 
 sq5.addEventListener("click", function () {
   if (gameStateOn) {
     activeSquare = "5";
-    if (isIconHidden(activeSquare)) {
-      showIcon();
-      checkWinner();
-    }
+    runResult();
   }
 });
 
 sq6.addEventListener("click", function () {
   if (gameStateOn) {
     activeSquare = "6";
-    if (isIconHidden(activeSquare)) {
-      showIcon();
-      checkWinner();
-    }
+    runResult();
   }
 });
 
 sq7.addEventListener("click", function () {
   if (gameStateOn) {
     activeSquare = "7";
-    if (isIconHidden(activeSquare)) {
-      showIcon();
-      checkWinner();
-    }
+    runResult();
   }
 });
 
 sq8.addEventListener("click", function () {
   if (gameStateOn) {
     activeSquare = "8";
-    if (isIconHidden(activeSquare)) {
-      showIcon();
-      checkWinner();
-    }
+    runResult();
   }
 });
 
