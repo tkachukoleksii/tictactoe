@@ -18,7 +18,7 @@ const gameStatus = document.querySelector(".status");
 const btnNew = document.querySelector(".btn--new");
 const author = document.querySelector(".author");
 
-const combinations = [
+const winCombinations = [
   [0, 1, 2],
   [3, 4, 5],
   [6, 7, 8],
@@ -113,7 +113,7 @@ const checkDraw = function () {
 };
 
 const checkWinner = function () {
-  for (const combo of combinations) {
+  for (const combo of winCombinations) {
     if (
       !document
         .querySelector(`.sq${combo[0]}--${activePlayer}`)
@@ -137,81 +137,23 @@ const checkWinner = function () {
   }
 };
 
-const runResult = function () {
-  if (isIconHidden(activeSquare)) {
-    showIcon();
-    if (!checkWinner()) {
-      if (checkDraw()) {
-        gameStatus.textContent = `A draw. 🤷`;
-        gameStateOn = false;
-      } else {
-        switchPlayer();
+for (const square of sqAll) {
+  square.addEventListener("click", function () {
+    if (gameStateOn) {
+      activeSquare = square.className.slice(-1);
+      if (isIconHidden(activeSquare)) {
+        showIcon();
+        if (!checkWinner()) {
+          if (checkDraw()) {
+            gameStatus.textContent = `A draw. 🤷`;
+            gameStateOn = false;
+          } else {
+            switchPlayer();
+          }
+        }
       }
     }
-  }
-};
-
-sq0.addEventListener("click", function () {
-  if (gameStateOn) {
-    activeSquare = "0";
-    runResult();
-  }
-});
-
-sq1.addEventListener("click", function () {
-  if (gameStateOn) {
-    activeSquare = "1";
-    runResult();
-  }
-});
-
-sq2.addEventListener("click", function () {
-  if (gameStateOn) {
-    activeSquare = "2";
-    runResult();
-  }
-});
-
-sq3.addEventListener("click", function () {
-  if (gameStateOn) {
-    activeSquare = "3";
-    runResult();
-  }
-});
-
-sq4.addEventListener("click", function () {
-  if (gameStateOn) {
-    activeSquare = "4";
-    runResult();
-  }
-});
-
-sq5.addEventListener("click", function () {
-  if (gameStateOn) {
-    activeSquare = "5";
-    runResult();
-  }
-});
-
-sq6.addEventListener("click", function () {
-  if (gameStateOn) {
-    activeSquare = "6";
-    runResult();
-  }
-});
-
-sq7.addEventListener("click", function () {
-  if (gameStateOn) {
-    activeSquare = "7";
-    runResult();
-  }
-});
-
-sq8.addEventListener("click", function () {
-  if (gameStateOn) {
-    activeSquare = "8";
-    runResult();
-  }
-});
+  });
+}
 
 btnNew.addEventListener("click", init);
