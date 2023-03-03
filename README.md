@@ -1,5 +1,5 @@
 # tictactoe
 
-JavaScript game of Tic-Tac-Toe by Oleksii Tkachuk
+JavaScript game of Tic-Tac-Toe by Oleksii Tkachuk.
 
-First self-made thingy, no tutorials whatsoever.
+First self-made thingy, no tutorials whatsoever!
