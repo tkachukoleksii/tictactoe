@@ -4,16 +4,6 @@ const sqAll = document.querySelectorAll(".sq");
 const xAll = document.querySelectorAll(".x");
 const oAll = document.querySelectorAll(".o");
 
-const sq0 = document.querySelector(".sq--0");
-const sq1 = document.querySelector(".sq--1");
-const sq2 = document.querySelector(".sq--2");
-const sq3 = document.querySelector(".sq--3");
-const sq4 = document.querySelector(".sq--4");
-const sq5 = document.querySelector(".sq--5");
-const sq6 = document.querySelector(".sq--6");
-const sq7 = document.querySelector(".sq--7");
-const sq8 = document.querySelector(".sq--8");
-
 const gameStatus = document.querySelector(".status");
 const btnNew = document.querySelector(".btn--new");
 const author = document.querySelector(".author");
