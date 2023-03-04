@@ -8,15 +8,10 @@ const gameStatus = document.querySelector(".status");
 const btnNew = document.querySelector(".btn--new");
 const author = document.querySelector(".author");
 
-const winCombinations = [
+let field = [
   [0, 1, 2],
   [3, 4, 5],
   [6, 7, 8],
-  [0, 3, 6],
-  [1, 4, 7],
-  [2, 5, 8],
-  [0, 4, 8],
-  [2, 4, 6],
 ];
 
 let activePlayer;
@@ -73,6 +68,14 @@ const showIcon = function () {
   }
 };
 
+const winState = function () {
+  gameStatus.textContent = `${activePlayer === "x" ? "X" : "O"} wins! 🍾`;
+  document.querySelector("body").style.transition = "all, 0.3s";
+  document.querySelector("body").style.backgroundColor = "#8CFBDE";
+  btnNew.style.color = "#8CFBDE";
+  gameStateOn = false;
+};
+
 const switchPlayer = function () {
   if (activePlayer === "x") {
     activePlayer = "o";
@@ -83,12 +86,82 @@ const switchPlayer = function () {
   }
 };
 
-const winState = function () {
-  gameStatus.textContent = `${activePlayer === "x" ? "X" : "O"} wins! 🍾`;
-  document.querySelector("body").style.transition = "all, 0.3s";
-  document.querySelector("body").style.backgroundColor = "#8CFBDE";
-  btnNew.style.color = "#8CFBDE";
-  gameStateOn = false;
+const checkDiagonal = function () {
+  let toRight = true;
+  let toLeft = true;
+  let winSquaresToRight = [];
+  let winSquaresToLeft = [];
+
+  for (let row = 0; row < field.length; row++) {
+    toRight &&= !document
+      .querySelector(`.sq${field[row][row]}--${activePlayer}`)
+      .classList.contains("hidden");
+
+    if (toRight) winSquaresToRight.push(field[row][row]);
+
+    toLeft &&= !document
+      .querySelector(
+        `.sq${field[field.length - row - 1][row]}--${activePlayer}`
+      )
+      .classList.contains("hidden");
+
+    if (toLeft) winSquaresToLeft.push(field[field.length - row - 1][row]);
+  }
+
+  if (toRight) {
+    for (const square of winSquaresToRight) {
+      document.querySelector(`.sq--${square}`).style.backgroundColor =
+        "#8CFBDE";
+    }
+    return true;
+  } else if (toLeft) {
+    for (const square of winSquaresToLeft) {
+      document.querySelector(`.sq--${square}`).style.backgroundColor =
+        "#8CFBDE";
+    }
+    return true;
+  } else {
+    return false;
+  }
+};
+
+const checkRowsCols = function () {
+  for (let row = 0; row < field.length; row++) {
+    let rows = true;
+    let cols = true;
+    let winSquaresRows = [];
+    let winSquaresCols = [];
+
+    for (let col = 0; col < field.length; col++) {
+      rows &&= !document
+        .querySelector(`.sq${field[row][col]}--${activePlayer}`)
+        .classList.contains("hidden");
+
+      if (rows) winSquaresRows.push(field[row][col]);
+
+      cols &&= !document
+        .querySelector(`.sq${field[col][row]}--${activePlayer}`)
+        .classList.contains("hidden");
+
+      if (cols) winSquaresCols.push(field[col][row]);
+    }
+
+    if (rows) {
+      for (const square of winSquaresRows) {
+        document.querySelector(`.sq--${square}`).style.backgroundColor =
+          "#8CFBDE";
+      }
+      return true;
+    } else if (cols) {
+      for (const square of winSquaresCols) {
+        document.querySelector(`.sq--${square}`).style.backgroundColor =
+          "#8CFBDE";
+      }
+      return true;
+    }
+  }
+
+  return false;
 };
 
 const checkDraw = function () {
@@ -102,38 +175,15 @@ const checkDraw = function () {
   }
 };
 
-const checkWinner = function () {
-  for (const combo of winCombinations) {
-    if (
-      !document
-        .querySelector(`.sq${combo[0]}--${activePlayer}`)
-        .classList.contains("hidden") &&
-      !document
-        .querySelector(`.sq${combo[1]}--${activePlayer}`)
-        .classList.contains("hidden") &&
-      !document
-        .querySelector(`.sq${combo[2]}--${activePlayer}`)
-        .classList.contains("hidden")
-    ) {
-      document.querySelector(`.sq--${combo[0]}`).style.backgroundColor =
-        "#8CFBDE";
-      document.querySelector(`.sq--${combo[1]}`).style.backgroundColor =
-        "#8CFBDE";
-      document.querySelector(`.sq--${combo[2]}`).style.backgroundColor =
-        "#8CFBDE";
-      winState();
-      return true;
-    }
-  }
-};
-
 for (const square of sqAll) {
   square.addEventListener("click", function () {
     if (gameStateOn) {
       activeSquare = square.className.slice(-1);
       if (isIconHidden(activeSquare)) {
         showIcon();
-        if (!checkWinner()) {
+        if (checkDiagonal() || checkRowsCols()) {
+          winState();
+        } else {
           if (checkDraw()) {
             gameStatus.textContent = `A draw. 🤷`;
             gameStateOn = false;
